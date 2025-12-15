@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class AdvaceBooking {
+public class advanceBooking {
     @Id
     @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
     private Long driverId;
@@ -28,7 +28,7 @@ public class AdvaceBooking {
     private String driverName;
 
     @NotBlank
-    @Size(min = 10, max = 10, message = "DriverPhoneNumber must be between 10 nubers")
+    @Size(min = 10, max = 10, message = "DriverPhoneNumber must be between 10 numbers")
     private Integer driverPhoneNumber;
    
     @NotBlank

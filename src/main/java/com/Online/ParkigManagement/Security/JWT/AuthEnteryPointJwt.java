@@ -1,8 +1,11 @@
+
+
 package com.Online.ParkigManagement.Security.JWT;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
@@ -17,17 +20,20 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 @Component
-public class AuthEnteryPointJwt implements AuthenticationEntryPoint{
+public class AuthEnteryPointJwt implements AuthenticationEntryPoint {
 
-    private static final Logger logger = LoggerFactory.getLogger(AuthEnteryPointJwt.class);
-
+    private static final Logger logger =
+            LoggerFactory.getLogger(AuthEnteryPointJwt.class);
 
     @Override
-    public void commence(HttpServletRequest request, HttpServletResponse response,
-            AuthenticationException authException) throws IOException, ServletException {
-               logger.error("Unauthorized error: {}", authException.getMessage());
-              
-               
+    public void commence(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            AuthenticationException authException)
+            throws IOException, ServletException {
+
+        logger.error("Unauthorized error: {}", authException.getMessage());
+
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 
@@ -37,7 +43,7 @@ public class AuthEnteryPointJwt implements AuthenticationEntryPoint{
         body.put("message", authException.getMessage());
         body.put("path", request.getServletPath());
 
-        final ObjectMapper mapper = new ObjectMapper();
+        ObjectMapper mapper = new ObjectMapper();
         mapper.writeValue(response.getOutputStream(), body);
     }
 }

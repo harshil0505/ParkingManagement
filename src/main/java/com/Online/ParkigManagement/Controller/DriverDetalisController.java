@@ -30,7 +30,7 @@ public class DriverDetalisController {
     
         @PostMapping("/driverDetails")
         public ResponseEntity<DriverDetailsDto> addDetalis( @RequestBody DriverDetailsDto driverDetailsDto ){
-            DriverDetailsDto driverDetailsDto2=driverDetailsService.addDetalis(driverDetailsDto);
+            DriverDetailsDto driverDetailsDto2=driverDetailsService.addDetails(driverDetailsDto);
             return new ResponseEntity<>(driverDetailsDto2,HttpStatus.OK);
         }
         

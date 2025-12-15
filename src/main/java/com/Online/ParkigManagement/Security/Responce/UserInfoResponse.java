@@ -11,17 +11,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UserInfoResponse {
        
-         private Long id;
-         private String email;
-         private String Possword;
-
     
-
-         public UserInfoResponse(Long id2, String email2, String password, List<String> roles, String string) {
-        
-        this.id = id2;
-        this.email = email2;
-        this.Possword = password;
-        
-         }
+    private Long id;
+    private String email;
+    private String password;
+    private List<String> roles;
+    private String token;
 }
+ 

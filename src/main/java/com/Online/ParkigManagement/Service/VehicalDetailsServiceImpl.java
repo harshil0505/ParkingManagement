@@ -52,7 +52,7 @@ public class VehicalDetailsServiceImpl implements VehicalDetailsService {
       vehicalDetails.setVehicalId(null); 
       vehicalDetails.setEntryTime(LocalDateTime.now());  
       vehicalDetails.setExitTime(null);  
-      vehicalDetails.setDurasionOntime(null);
+      vehicalDetails.setDurationOntime(null);
       vehicalDetails.setFee(null);
       
  
@@ -176,7 +176,7 @@ public class VehicalDetailsServiceImpl implements VehicalDetailsService {
 
     vehicalDetails.setExitTime(LocalDateTime.now());
     long minutes = Duration.between(vehicalDetails.getEntryTime(), vehicalDetails.getExitTime()).toMinutes();
-    vehicalDetails.setDurasionOntime(minutes);
+    vehicalDetails.setDurationOntime(minutes);
 
     
     double feePerHour = feeConfig.getfess(vehicalDetails.getVehicalType());

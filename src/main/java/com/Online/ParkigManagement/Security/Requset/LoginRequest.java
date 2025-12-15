@@ -15,4 +15,10 @@ public class LoginRequest {
     private String email;
     @NotBlank
     private String password;
+
+    
+    public java.util.Set<String> getRoles() {
+        return null;
+ 
+}
 }

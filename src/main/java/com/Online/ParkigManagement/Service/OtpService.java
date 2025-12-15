@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import com.Online.ParkigManagement.Repository.OtpTokenRepositroy;
+import com.Online.ParkigManagement.Repository.OtpTokenRepository;
 import com.Online.ParkigManagement.model.OtpToken;
 
 import jakarta.transaction.Transactional;
@@ -20,7 +20,7 @@ import jakarta.transaction.Transactional;
 public class OtpService {
  
     @Autowired
-    private  OtpTokenRepositroy otpTokenRepositroy;
+    private  OtpTokenRepository otpTokenRepositroy;
 
     @Autowired
     private EmailVerificationServiceImpl emailVerificationServiceimpl;

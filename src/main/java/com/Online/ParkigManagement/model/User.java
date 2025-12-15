@@ -1,8 +1,12 @@
 package com.Online.ParkigManagement.model;
 
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+
+import com.Online.ParkigManagement.Config.RoleConstants;
 
 import jakarta.persistence.*;
 
@@ -43,13 +47,34 @@ public class User {
       @JoinColumn(name = "driver_id", referencedColumnName = "driverId")
       private DriverDetails driverDetails;
 
-      @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+      
+    @ManyToMany(fetch = FetchType.EAGER)
+   
       @JoinTable(
           name = "user_roles",
-          joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
-          inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "role_id")
+          joinColumns = @JoinColumn(name = "user_id"),
+          inverseJoinColumns = @JoinColumn(name = "role_id")
       )
       private Set<Role> roles = new HashSet<>();
+
+      @OneToMany(mappedBy = "user", cascade = CascadeType.ALL,orphanRemoval = true )
+      private List<Address> addresses=new ArrayList<>();
+
+      public void addRole(Role role) {
+        this.roles.add(role);
+      }
+
+      public AppRole getAppRole() {
+        if (roles.stream().anyMatch(role -> role.getRoleName().equals(RoleConstants.ROLE_ADMIN))) {
+            return AppRole.ROLE_ADMIN;
+        } else if (roles.stream().anyMatch(role -> role.getRoleName().equals(RoleConstants.ROLE_DRIVER))) {
+            return AppRole.ROLE_DRIVER;
+         // Default role if none match
+        }
+        return AppRole.ROLE_DRIVER;
+      }
+
+   
 
 
    

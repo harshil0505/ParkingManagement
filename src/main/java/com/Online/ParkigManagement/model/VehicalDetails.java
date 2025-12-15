@@ -39,7 +39,7 @@ public class VehicalDetails {
     private String vehicalType;
     private LocalDateTime entryTime;
     private LocalDateTime exitTime;
-    private Long durasionOntime;
+    private Long durationOntime;
     private Double fee;
 
     @JsonIgnore

@@ -19,15 +19,13 @@ import com.Online.ParkigManagement.model.DriverDetails;
 public class DriverDetailsServiceImpl implements DriverDetailsService{
 
     @Autowired
-    ModelMapper modelMapper;
-
+     private ModelMapper modelMapper;
+ 
     @Autowired
     DriverDetailsRepository  driverDetailsRepository;
 
-    
-
     @Override
-    public DriverDetailsDto addDetalis(DriverDetailsDto driverDetailsDto) {
+    public DriverDetailsDto addDetails(DriverDetailsDto driverDetailsDto) {
       DriverDetails driverDetails=modelMapper.map(driverDetailsDto,DriverDetails.class);
       driverDetails.setDriverId(null);
       
@@ -35,6 +33,8 @@ public class DriverDetailsServiceImpl implements DriverDetailsService{
             return modelMapper.map(savedDetails, DriverDetailsDto.class);
 
     }
+
+   
 
 
     @Override
@@ -110,6 +110,12 @@ public class DriverDetailsServiceImpl implements DriverDetailsService{
            driverDetailsRepository.delete(DetailsFromdb);
            return modelMapper.map(DetailsFromdb, DriverDetailsDto.class);
     }
+
+
+    
+
+
+   
             
             
   
