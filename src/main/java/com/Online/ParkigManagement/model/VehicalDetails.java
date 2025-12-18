@@ -1,13 +1,15 @@
 package com.Online.ParkigManagement.model;
 
-import java.time.LocalDateTime;
+
 import java.util.List;
     
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import io.micrometer.common.lang.NonNull;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -25,6 +27,8 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Getter
+@Setter
 @Table(name = "vehical_details")
 public class VehicalDetails {
     @Id
@@ -34,12 +38,13 @@ public class VehicalDetails {
     @Column(unique = true)
     private String vehicalNumber;
     
-    @Getter
-    @Setter
-    private String vehicalType;
-    private LocalDateTime entryTime;
-    private LocalDateTime exitTime;
-    private Long durationOntime;
+   @Enumerated(jakarta.persistence.EnumType.STRING)
+    private VehicalType vehicalType;
+
+    @NonNull
+    private Integer  duration;
+  
+    @NonNull
     private Double fee;
 
     @JsonIgnore
@@ -47,7 +52,5 @@ public class VehicalDetails {
     @JoinColumn(name = "driver_id")
     private DriverDetails driverDetails;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "vehicalDetails", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<History> history;
+   
 }

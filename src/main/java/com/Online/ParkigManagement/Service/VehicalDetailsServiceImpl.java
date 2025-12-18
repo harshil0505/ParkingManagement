@@ -1,7 +1,6 @@
 package com.Online.ParkigManagement.Service;
 
-import java.time.Duration;
-import java.time.LocalDateTime;
+
 import java.util.List;
 
 import org.modelmapper.ModelMapper;
@@ -15,13 +14,16 @@ import org.springframework.stereotype.Service;
 import com.Online.ParkigManagement.Config.feeConfig;
 import com.Online.ParkigManagement.Payload.VehicalDetailsDto;
 import com.Online.ParkigManagement.Payload.VehicalDetailsResponse;
+import com.Online.ParkigManagement.Repository.AddressRepository;
 import com.Online.ParkigManagement.Repository.DriverDetailsRepository;
+import com.Online.ParkigManagement.Repository.MyBookingRepository;
 import com.Online.ParkigManagement.Repository.VehicalDetailsRepository;
 import com.Online.ParkigManagement.excepasion.ResourceNotFoundException;
+import com.Online.ParkigManagement.model.Address;
+import com.Online.ParkigManagement.model.BookingStatus;
 import com.Online.ParkigManagement.model.DriverDetails;
+import com.Online.ParkigManagement.model.MyBooking;
 import com.Online.ParkigManagement.model.VehicalDetails;
-
-import jakarta.transaction.Transactional;
 
 @Service
 public class VehicalDetailsServiceImpl implements VehicalDetailsService {
@@ -36,11 +38,18 @@ public class VehicalDetailsServiceImpl implements VehicalDetailsService {
     feeConfig feeConfig;
 
    
+    @Autowired
+    private MyBookingRepository myBookingRepository;
 
     @Autowired
     VehicalDetailsRepository  vehicalDetailsRepository;
 
-    
+  
+
+    @Autowired
+    AddressRepository addressRepository;
+ 
+   
     @Override
     public VehicalDetailsDto addDetalis(VehicalDetailsDto vehicalDetailsDto){
 
@@ -50,10 +59,10 @@ public class VehicalDetailsServiceImpl implements VehicalDetailsService {
       VehicalDetails vehicalDetails=modelMapper.map(vehicalDetailsDto,VehicalDetails.class);
       vehicalDetails.getVehicalId();
       vehicalDetails.setVehicalId(null); 
-      vehicalDetails.setEntryTime(LocalDateTime.now());  
-      vehicalDetails.setExitTime(null);  
-      vehicalDetails.setDurationOntime(null);
-      vehicalDetails.setFee(null);
+      vehicalDetails.setDuration(0);
+      vehicalDetails.setVehicalNumber(vehicalDetailsDto.getVehicalNumber());
+      
+      vehicalDetails.setFee(0.0);
       
  
     
@@ -129,8 +138,8 @@ public class VehicalDetailsServiceImpl implements VehicalDetailsService {
        DetailsFromdb.setVehicalId(vehicalDetails.getVehicalId());
        DetailsFromdb.setVehicalNumber(vehicalDetails.getVehicalNumber());
        DetailsFromdb.setVehicalType(vehicalDetails.getVehicalType());
-       DetailsFromdb.setEntryTime(vehicalDetails.getEntryTime());
-         DetailsFromdb.setExitTime(vehicalDetails.getExitTime());
+     
+       DetailsFromdb.setDuration(vehicalDetails.getDuration());
 
        VehicalDetails saveDetails=vehicalDetailsRepository.save(DetailsFromdb);
 
@@ -149,47 +158,53 @@ public class VehicalDetailsServiceImpl implements VehicalDetailsService {
 
 
     @Override
-    public VehicalDetailsDto getenteryTime(String vehicalNumber,String vehicalType) {
-       
-    VehicalDetailsDto vehicalDetailsDto = new VehicalDetailsDto();
-       vehicalDetailsDto.setVehicalNumber(vehicalNumber);
-       vehicalDetailsDto.setVehicalType(vehicalType.toLowerCase());
-       vehicalDetailsDto.setEntryTime(LocalDateTime.now());
-      
-        return vehicalDetailsDto;
-    }
+    public VehicalDetailsDto DurationTime(String vehicalNumber, Long driverId, Integer duration, Long addressId) {
+        if (duration == null || duration <= 0) {
+                throw new IllegalArgumentException("Duration must be greater than 0");
+            }
+        
+            VehicalDetails vehicalDetails =
+                    vehicalDetailsRepository.findByVehicalNumber(vehicalNumber)
+                    .orElseThrow(() -> new ResourceNotFoundException(
+                            "VehicalDetails", "vehicalNumber", vehicalNumber));
+        
+            DriverDetails driverDetails =
+                    driverDetailsRepository.findById(driverId)
+                    .orElseThrow(() -> new ResourceNotFoundException(
+                            "DriverDetails", "driverId", driverId));
+        
+            Address address =
+                    addressRepository.findById(addressId)
+                    .orElseThrow(() -> new ResourceNotFoundException(
+                            "Address", "addressId", addressId));
+        
+            vehicalDetails.setDriverDetails(driverDetails);
+            vehicalDetails.setDuration(duration);
+        
+            double feePerHour = feeConfig.getFee(vehicalDetails.getVehicalType());
+            double totalFee = feePerHour * duration;
+            vehicalDetails.setFee(totalFee);
+        
+            vehicalDetailsRepository.save(vehicalDetails);
+        
+            boolean activeBookingExists =
+                    myBookingRepository.existsByVehicalNumberAndStatus(
+                            vehicalNumber, BookingStatus.ACTIVE);
+        
+            if (!activeBookingExists) {
+                MyBooking booking = new MyBooking();
+                booking.setVehicalNumber(vehicalNumber);
+                booking.setVehicalType(vehicalDetails.getVehicalType().name());
+                booking.setDuration(duration);
+                booking.setFee(totalFee);
+                booking.setAddress(address); // ✅ reuse address
+                booking.setStatus(BookingStatus.ACTIVE);
+        
+                myBookingRepository.save(booking);
+            }
+        
+            return modelMapper.map(vehicalDetails, VehicalDetailsDto.class);
+        }
 
 
-
-    @Override
-    @Transactional
-    public VehicalDetailsDto getexitTime(String vehicalNumber, Long driverId) {
-  
-    VehicalDetails vehicalDetails = vehicalDetailsRepository.findLatestActiveEntry(vehicalNumber)
-        .orElseThrow(() -> new ResourceNotFoundException("VehicalDetails", "vehicalNumber", vehicalNumber));
-
-    DriverDetails driverDetails = driverDetailsRepository.findById(driverId)
-        .orElseThrow(() -> new ResourceNotFoundException("DriverDetails", "driverId", driverId));
-
-    
-    vehicalDetails.setDriverDetails(driverDetails);
-
-    vehicalDetails.setExitTime(LocalDateTime.now());
-    long minutes = Duration.between(vehicalDetails.getEntryTime(), vehicalDetails.getExitTime()).toMinutes();
-    vehicalDetails.setDurationOntime(minutes);
-
-    
-    double feePerHour = feeConfig.getfess(vehicalDetails.getVehicalType());
-    double fee = Math.ceil(minutes / 60.0) * feePerHour;
-    vehicalDetails.setFee(fee);
-
-
-    VehicalDetails savedDetails = vehicalDetailsRepository.save(vehicalDetails);
-
-   
-    VehicalDetailsDto vehicalDetailsDto = modelMapper.map(savedDetails, VehicalDetailsDto.class);
-    vehicalDetailsDto.setDriverId(driverId);
-
-    return vehicalDetailsDto;
-}
-}
+}   

@@ -25,7 +25,7 @@ import com.Online.ParkigManagement.Repository.RoleRepository;
 import com.Online.ParkigManagement.Repository.UserRepository;
 import com.Online.ParkigManagement.Security.JWT.AuthEnteryPointJwt;
 import com.Online.ParkigManagement.Security.JWT.AuthTokenFilter;
-
+import com.Online.ParkigManagement.model.AppRole;
 import com.Online.ParkigManagement.model.Role;
 import com.Online.ParkigManagement.model.User;
 
@@ -115,10 +115,10 @@ public class WebSecurityConfig {
         
             return args -> {
         
-                Role userRole = roleRepository.findByRoleName("ROLE_DRIVER")
+                Role userRole = roleRepository.findByRoleName(AppRole.ROLE_DRIVER)
                         .orElseThrow(() -> new RuntimeException("ROLE_DRIVER missing in DB"));
         
-                Role adminRole = roleRepository.findByRoleName("ROLE_ADMIN")
+                Role adminRole = roleRepository.findByRoleName(AppRole.ROLE_ADMIN)
                         .orElseThrow(() -> new RuntimeException("ROLE_ADMIN missing in DB"));
         
                 if (!userRepository.existsByEmail("admin@example.com")) {

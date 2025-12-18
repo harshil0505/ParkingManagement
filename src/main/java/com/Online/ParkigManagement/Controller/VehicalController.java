@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.Online.ParkigManagement.Config.AppConstant;
+import com.Online.ParkigManagement.Payload.DurationRequestDto;
 import com.Online.ParkigManagement.Payload.VehicalDetailsDto;
 import com.Online.ParkigManagement.Payload.VehicalDetailsResponse;
 import com.Online.ParkigManagement.Service.VehicalDetailsService;
@@ -68,17 +69,20 @@ public class VehicalController {
         VehicalDetailsDto DeleteDataDto=vehicalDetailsService.deleteData(vehicalId);
         return new ResponseEntity<>(DeleteDataDto,HttpStatus.OK);
     }
-    @PostMapping("/entryTime")
-    public ResponseEntity<VehicalDetailsDto> getEntryTime(@RequestBody VehicalDetailsDto request) {
-        VehicalDetailsDto entryDetailsDto =
-                vehicalDetailsService.getenteryTime(request.getVehicalNumber(), request.getVehicalType());
-        return new ResponseEntity<>(entryDetailsDto, HttpStatus.OK);
-    }
-
-    @PostMapping("/exitTime/vehicalNumber/{vehicalNumber}/driver/{driverId}")
-    public ResponseEntity<VehicalDetailsDto> getexitTime(@PathVariable String vehicalNumber,@PathVariable Long driverId) {
-        VehicalDetailsDto exitDetailsDto = vehicalDetailsService.getexitTime(vehicalNumber, driverId);
-        return new ResponseEntity<>(exitDetailsDto, HttpStatus.OK);
+   
+    @PostMapping("/durationTime")
+    public ResponseEntity<VehicalDetailsDto> durationTime(
+            @RequestBody DurationRequestDto request) {
+    
+        VehicalDetailsDto dto =
+                vehicalDetailsService.DurationTime(
+                        request.getVehicalNumber(),
+                        request.getDriverId(),
+                        request.getDuration(),
+                        request.getAddressId()
+                );
+    
+        return ResponseEntity.ok(dto);
     }
     
     

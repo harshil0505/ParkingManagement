@@ -14,9 +14,9 @@ public class VehicalDetailsDto {
      private Long vehicalId;
      private String vehicalNumber;
      private String vehicalType;
-     private LocalDateTime entryTime;
-     private LocalDateTime exitTime;
-     private Long durasionOntime;
+    
+     private Integer duration;
+     
      private Double fee;
      private Long driverId;
 }

@@ -24,7 +24,7 @@ public class AddressController {
     @Autowired
     private AddressServices addressServices;
 
-    @PostMapping("/admin/createaddress")
+    @PostMapping("/createaddress")
     public ResponseEntity<AddressDto> Createaddress(@RequestBody AddressDto addressDto){
         AddressDto addressDto2 =addressServices.createAddress(addressDto);
         return new ResponseEntity<>(addressDto2, HttpStatus.CREATED);

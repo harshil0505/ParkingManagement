@@ -3,8 +3,6 @@ package com.Online.ParkigManagement.Security.ServiceSecurity;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
-
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -30,10 +28,12 @@ public class UserDetaileImpl implements UserDetails{
     private Collection<? extends GrantedAuthority> authorities;
 
     public static UserDetaileImpl build( User user) {
-        List<GrantedAuthority> authorities = user.getRoles().stream()
-        .map(role -> new SimpleGrantedAuthority(role.getRoleName()))
-        .collect(Collectors.toList());
-
+        List<SimpleGrantedAuthority> authorities = user.getRoles().stream()
+    
+        .map(role -> new SimpleGrantedAuthority(role.getRoleName().name()))
+        .toList();
+    
+        
         return new UserDetaileImpl(
             user.getId(),
             user.getEmail(),
@@ -85,6 +85,10 @@ public class UserDetaileImpl implements UserDetails{
     @Override
     public int hashCode() {
         return Objects.hash(id, email); // or whichever fields you want
+    }
+    public UserDetails loadUserByUsername(String username) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'loadUserByUsername'");
     }
     
 

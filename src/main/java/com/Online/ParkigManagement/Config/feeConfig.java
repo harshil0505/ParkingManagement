@@ -5,24 +5,25 @@ import java.util.Map;
 
 import org.springframework.stereotype.Component;
 
+import com.Online.ParkigManagement.model.VehicalType;
+
+
+
+
+
 @Component
 public class feeConfig {
 
-    public static final Map<String,Double> fees= new HashMap<>();
+    private static final Map<VehicalType, Double> fees = new HashMap<>();
 
-    static{
-         fees.put("2wheeler",20.0);
-         fees.put("3wheeler",30.0);
-         fees.put("4wheeler",40.0);
-         fees.put("truck",50.0);
+    static {
+        fees.put(VehicalType.TWO_WHEELER, 20.0);
+        fees.put(VehicalType.THREE_WHEELER, 30.0);
+        fees.put(VehicalType.FOUR_WHEELER, 40.0);
+        fees.put(VehicalType.TRUCK, 50.0);
     }
-    
-    public double getfess(String vehicalType){
-       return fees.getOrDefault(vehicalType.toLowerCase(),20.0);
+
+    public double getFee(VehicalType vehicalType) {
+        return fees.getOrDefault(vehicalType, 0.0);
     }
-    
-    
-
-
-    
 }

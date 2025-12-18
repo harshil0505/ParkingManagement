@@ -6,8 +6,8 @@ services:
     container_name: postgresdb
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: admin
-      POSTGRES_DB: mydb
+      POSTGRES_PASSWORD: ROOT
+      POSTGRES_DB: parking
     ports:
       - "5432:5432"
     volumes:
@@ -21,7 +21,7 @@ services:
       PGADMIN_DEFAULT_EMAIL: admin@admin.com
       PGADMIN_DEFAULT_PASSWORD: admin
     ports:
-      - "8080:80"
+      - "5050:80"        # ✅ changed port
     depends_on:
       - postgres
     restart: always
@@ -31,7 +31,7 @@ services:
     container_name: ParkingManagement
     command: mvn spring-boot:run
     ports:
-      - "8081:8080"
+      - "8082:8080"      # ✅ changed port
     environment:
       SPRING_PROFILES_ACTIVE: docker
     depends_on:
@@ -40,3 +40,4 @@ services:
 
 volumes:
   postgres_data:
+

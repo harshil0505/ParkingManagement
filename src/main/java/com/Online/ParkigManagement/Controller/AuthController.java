@@ -3,7 +3,6 @@ package com.Online.ParkigManagement.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.Online.ParkigManagement.Config.RoleConstants;
 import com.Online.ParkigManagement.Repository.RoleRepository;
 import com.Online.ParkigManagement.Repository.UserRepository;
 import com.Online.ParkigManagement.Security.JWT.JwtUtils;
@@ -98,7 +97,8 @@ public class AuthController {
     }
 
  @PostMapping("/create-admin")
-@PreAuthorize("hasRole('ADMIN')")
+ @PreAuthorize("hasRole('ADMIN')")
+
 public ResponseEntity<?> createAdmin(@Valid @RequestBody SignupRequest signupRequest) {
 
     if (userRepository.existsByEmail(signupRequest.getEmail())) {
@@ -110,7 +110,7 @@ public ResponseEntity<?> createAdmin(@Valid @RequestBody SignupRequest signupReq
             encoder.encode(signupRequest.getPassword())
     );
 
-    Role adminRole = roleRepository.findByRoleName(RoleConstants.ROLE_ADMIN)
+    Role adminRole = roleRepository.findByRoleName(AppRole.ROLE_ADMIN)
             .orElseThrow(() -> new RuntimeException("ROLE_ADMIN not found"));
 
     admin.setRoles(Set.of(adminRole));
@@ -138,7 +138,7 @@ public ResponseEntity<?> createAdmin(@Valid @RequestBody SignupRequest signupReq
     
         // Default role → DRIVER
         if (strRoles == null || strRoles.isEmpty()) {
-            Role driverRole = roleRepository.findByRoleName(RoleConstants.ROLE_DRIVER)
+            Role driverRole = roleRepository.findByRoleName(AppRole.ROLE_DRIVER)
                     .orElseThrow(() -> new RuntimeException("Error: DRIVER role not found"));
             roles.add(driverRole);
     
@@ -147,15 +147,15 @@ public ResponseEntity<?> createAdmin(@Valid @RequestBody SignupRequest signupReq
                 switch (role.trim().toUpperCase()) {
     
                     case "ADMIN":
-                    case RoleConstants.ROLE_ADMIN:
-                        Role adminRole = roleRepository.findByRoleName(RoleConstants.ROLE_ADMIN)
+                
+                        Role adminRole = roleRepository.findByRoleName(AppRole.ROLE_ADMIN)
                                 .orElseThrow(() -> new RuntimeException("Error: ADMIN role not found"));
                         roles.add(adminRole);
                         break;
     
                     case "DRIVER":
-                    case RoleConstants.ROLE_DRIVER:
-                        Role driverRole = roleRepository.findByRoleName(RoleConstants.ROLE_DRIVER)
+        
+                        Role driverRole = roleRepository.findByRoleName(AppRole.ROLE_DRIVER)
                                 .orElseThrow(() -> new RuntimeException("Error: DRIVER role not found"));
                         roles.add(driverRole);
                         break;

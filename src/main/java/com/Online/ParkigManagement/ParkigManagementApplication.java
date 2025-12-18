@@ -6,8 +6,8 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication
-@EntityScan("com.Online.ParkigManagement.Model")
-@EnableJpaRepositories("com.Online.ParkigManagement.Repository")
+@EnableJpaRepositories(basePackages = "com.Online.ParkigManagement.Repository")
+@EntityScan(basePackages = "com.Online.ParkigManagement.model")
 public class ParkigManagementApplication {
 
 	public static void main(String[] args) {

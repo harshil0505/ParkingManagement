@@ -16,8 +16,7 @@ public interface VehicalDetailsService {
 
     VehicalDetailsDto deleteData(Long vehicalId);
 
-    VehicalDetailsDto getexitTime(String vehicalNumber, Long driverId);
+    VehicalDetailsDto DurationTime(String vehicalNumber, Long driverId, Integer duration, Long addressId);
 
-    VehicalDetailsDto getenteryTime(String vehicalNumber, String vehicalType);
-
+   
 }

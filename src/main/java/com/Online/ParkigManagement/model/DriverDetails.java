@@ -39,10 +39,7 @@ public class DriverDetails {
     @Digits(integer = 10, fraction = 0, message = "Phone number must be 10 digits")
     private Long driverPhoneNumber;
 
-  
-    @JsonIgnore
-    @OneToMany(mappedBy = "driverDetails", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<History> history;
+;
  
     @JsonIgnore
     @OneToMany(mappedBy = "driverDetails", cascade = CascadeType.ALL, fetch = FetchType.LAZY)

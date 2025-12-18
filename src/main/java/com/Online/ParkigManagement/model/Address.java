@@ -24,11 +24,12 @@ public class Address {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long addressId;
+    private String parkingName;
     private String street;
     private String city;
     private String state;
     private String pincode;
-   
+
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
