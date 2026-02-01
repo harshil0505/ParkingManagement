@@ -86,10 +86,4 @@ public class UserDetaileImpl implements UserDetails{
     public int hashCode() {
         return Objects.hash(id, email); // or whichever fields you want
     }
-    public UserDetails loadUserByUsername(String username) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'loadUserByUsername'");
-    }
-    
-
 }

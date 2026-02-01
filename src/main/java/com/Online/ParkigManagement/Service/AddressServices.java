@@ -1,7 +1,5 @@
 package com.Online.ParkigManagement.Service;
 
-import java.util.List;
-
 import com.Online.ParkigManagement.Payload.AddressDto;
 
 public interface AddressServices {

@@ -3,10 +3,7 @@ package com.Online.ParkigManagement.Payload;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-import com.Online.ParkigManagement.model.Address;
 import com.Online.ParkigManagement.model.BookingStatus;
-import com.Online.ParkigManagement.model.MyBooking;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;

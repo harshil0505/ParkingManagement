@@ -32,11 +32,13 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:5173")
 @RequestMapping("/api/auth")
 public class AuthController {
 
@@ -83,14 +85,13 @@ public class AuthController {
                 .map(item -> item.getAuthority())
                 .collect(Collectors.toList());
 
-        UserInfoResponse response = new UserInfoResponse(
-                userDetails.getId(),
-                userDetails.getEmail(),
-                userDetails.getPassword(),
-                roles,
-                jwtCookie.getValue()
-        );
-
+                UserInfoResponse response = new UserInfoResponse(
+                    userDetails.getId(),
+                    userDetails.getEmail(),
+                    roles,
+                    jwtCookie.getValue()
+                );
+                
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
                 .body(response);
@@ -169,7 +170,9 @@ public ResponseEntity<?> createAdmin(@Valid @RequestBody SignupRequest signupReq
         user.setRoles(roles);
         userRepository.save(user);
     
-        return ResponseEntity.ok("User registered successfully!");
+        return ResponseEntity
+        .status(HttpStatus.CREATED)
+        .body(Map.of("message", "User registered successfully"));
     }
     
 
@@ -185,7 +188,7 @@ public ResponseEntity<?> createAdmin(@Valid @RequestBody SignupRequest signupReq
         UserInfoResponse response = new UserInfoResponse(
                 userDetails.getId(),
                 userDetails.getEmail(),
-                userDetails.getPassword(),
+               
                 roles,
                 null
         );

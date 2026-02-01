@@ -1,43 +1,18 @@
 version: '3.9'
 
 services:
-  postgres:
-    image: postgres:16
-    container_name: postgresdb
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: ROOT
-      POSTGRES_DB: parking
-    ports:
-      - "5432:5432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    restart: always
-
-  pgadmin:
-    image: dpage/pgadmin4
-    container_name: pgadmin
-    environment:
-      PGADMIN_DEFAULT_EMAIL: admin@admin.com
-      PGADMIN_DEFAULT_PASSWORD: admin
-    ports:
-      - "5050:80"        # ✅ changed port
-    depends_on:
-      - postgres
-    restart: always
-
   springboot:
     build: .
     container_name: ParkingManagement
-    command: mvn spring-boot:run
     ports:
-      - "8082:8080"      # ✅ changed port
+      - "8083:8080"
     environment:
       SPRING_PROFILES_ACTIVE: docker
-    depends_on:
-      - postgres
+
+      # 🔑 Neon connection (from Neon Console)
+      SPRING_DATASOURCE_URL: jdbc:postgresql://ep-withered-night-afga8n1m-pooler.c-2.us-west-2.aws.neon.tech/parking?sslmode=require
+      SPRING_DATASOURCE_USERNAME: neondb_owner
+      SPRING_DATASOURCE_PASSWORD: npg_gR8tH7dfhZsz
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.postgresql.Driver
+
     restart: always
-
-volumes:
-  postgres_data:
-
